@@ -28,6 +28,8 @@
     newLabel.font = self.myLabel.font;
     [newLabel bestSize]; // Before getting the best size, text and font property must be set priorly.
     
+    
+    
     // remove original myLabel before set with a new instance
     [self.myLabel removeFromSuperview];
     self.myLabel = newLabel;
