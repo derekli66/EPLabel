@@ -29,8 +29,7 @@ CG_INLINE CGSize EPLabelFittingSize(NSString *text, UIFont *aFont, CGRect aFrame
 }
 
 @interface EPLabel()
-@property (nonatomic) CGRect originalFrame; //this will be the maximum frame size
-@property (nonatomic) CGFloat maximumLabelHeight;
+@property (nonatomic) CGRect originalFrame;
 @end
 
 @implementation EPLabel
@@ -41,24 +40,29 @@ CG_INLINE CGSize EPLabelFittingSize(NSString *text, UIFont *aFont, CGRect aFrame
     if (self) {
         self.numberOfLines = 0;
         _originalFrame = frame;
-        _maximumLabelHeight = _originalFrame.size.height;
     }
     return self;
 }
 
--(id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.numberOfLines = 0;
         _originalFrame = self.frame;
-        _maximumLabelHeight = _originalFrame.size.height;
     }
     return self;
 }
 
+- (void)setNumberOfLines:(NSInteger)numbers
+{
+    NSAssert(numbers == 0, @"Assert at method, %@, line %d. The numberOfLines should be zero. Otherwise, EPLabel will not get work with multi-lines", NSStringFromSelector(_cmd), __LINE__);
+    
+    [super setNumberOfLines:numbers];
+}
+
 #pragma mark - Custom Methods
-+(CGFloat)labelHeightWithText:(NSString *)aString frame:(CGRect)aRect font:(UIFont *)aFont
++ (CGFloat)heightWithText:(NSString *)aString frame:(CGRect)aRect font:(UIFont *)aFont
 {
     if (EPLABEL_SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7")) {
         CGRect newRect = EPLabelFittingRect(aString, aFont, aRect);
@@ -69,24 +73,31 @@ CG_INLINE CGSize EPLabelFittingSize(NSString *text, UIFont *aFont, CGRect aFrame
     return aSize.height;
 }
 
--(CGFloat)currentHeight
+- (CGFloat)bestFittingHeight
 {
     if (EPLABEL_SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7")) {
-        CGRect textingRect = [self fittingTextFrameRect];
+        CGRect textingRect = [self fittingFrame];
         return textingRect.size.height;
     }
     
-    CGSize textingSize = [self fittingTextFrameSize];
+    CGSize textingSize = [self fittingSize];
     return textingSize.height;
 }
 
+- (void)bestSize
+{
+    CGFloat bestHeight = self.bestFittingHeight;
+    CGRect frame = self.originalFrame;
+    self.frame = CGRectMake(CGRectGetMinX(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), bestHeight);
+}
+
 #pragma mark - Private Methods
--(CGRect)fittingTextFrameRect
+- (CGRect)fittingFrame
 {
     return EPLabelFittingRect(self.text, self.font, self.originalFrame);
 }
 
--(CGSize)fittingTextFrameSize
+- (CGSize)fittingSize
 {
     return EPLabelFittingSize(self.text, self.font, self.originalFrame);
 }

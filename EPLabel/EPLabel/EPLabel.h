@@ -8,13 +8,42 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ DESCRIPTION:
+ EPLabel is a simple UILabel subclass to support multi-line text. If you need more properties like line height
+ or hyperlink detection, please consider TTTAttributedLabel or using NSAttributedString with pure UILabel.
+ 
+ CAUTION:
+ EPLabel has set up numberOfLines property to be zero at init step.
+ */
 @interface EPLabel : UILabel
+
+/**
+ Return original frame that was intially set up.
+ */
 @property (nonatomic, readonly) CGRect originalFrame;
 
 /**
- The current height will chane according to your UIFont and input text
+ It will return a best height to fit all text it contains
+ 
+ @return best fitting height
  */
--(CGFloat)currentHeight;
+- (CGFloat)bestFittingHeight;
 
-+(CGFloat)labelHeightWithText:(NSString *)aString frame:(CGRect)aRect font:(UIFont *)aFont;
+/**
+ A helper method to give a fitting size according to the best fitting height.
+ */
+- (void)bestSize;
+
+/**
+ Calculate the best height to include all text based on the font and the suggested frame
+ 
+ @param aString texts that you would like to dispaly
+ @param aRect   a suggested frame
+ @param aFont   the target font
+ 
+ @return the best height to fit all text
+ */
++ (CGFloat)heightWithText:(NSString *)aString frame:(CGRect)aRect font:(UIFont *)aFont;
+
 @end
