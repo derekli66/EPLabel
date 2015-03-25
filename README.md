@@ -23,3 +23,4 @@ Note: Be aware that Autolayout will affect label resizing when run -bestSize met
 
 Demo Result
 -------
+![Screenshot](https://github.com/derekli66/EPLabel/blob/master/demo.png)
