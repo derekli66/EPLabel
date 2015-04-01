@@ -1,5 +1,5 @@
 #EPLabel
--------
+
 EPLabel is a simple UILabel subclass to support multi-line text. If you need more properties like line height or hyperlink detection, please consider TTTAttributedLabel or using NSAttributedString with pure UILabel.
 
 How to use
